@@ -1,2 +1,3 @@
 # AndroidProgramming
 Android的练习项目，从fragment开始不断地添加功能
+添加静态newInstance方法对fragment附加argument，避免通过fragment直接托管activity的intent
