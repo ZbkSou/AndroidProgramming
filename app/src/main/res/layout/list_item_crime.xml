@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/crimr_list_itme_title"
+        android:text="dsf"
+
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/crime_list_itme_date"
+        android:layout_below="@id/crimr_list_itme_title"
+        android:text="sdf"
+        />
+    <CheckBox
+        android:id="@+id/crime__list_itme_solved"
+        android:layout_width="wrap_content"
+        android:focusable="false"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
