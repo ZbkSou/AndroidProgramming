@@ -4,7 +4,6 @@ import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -33,5 +32,11 @@ public class CrimeListFragment extends ListFragment {
         Intent i  = new Intent(getActivity(),CrimeActivity.class);
         i.putExtra(CrimeFragment.EXTRA_CRIME_ID,c.getMid());
         startActivity(i);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((CrimeAdapter)getListAdapter()).notifyDataSetChanged();
     }
 }
