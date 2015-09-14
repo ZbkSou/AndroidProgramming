@@ -1,7 +1,6 @@
-package com.example.bkzhou.fragment;
+package com.example.bkzhou.fragment.model;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.UUID;

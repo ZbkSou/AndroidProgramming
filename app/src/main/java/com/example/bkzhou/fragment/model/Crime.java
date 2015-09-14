@@ -1,4 +1,4 @@
-package com.example.bkzhou.fragment;
+package com.example.bkzhou.fragment.model;
 
 import java.text.DateFormat;
 import java.util.Date;

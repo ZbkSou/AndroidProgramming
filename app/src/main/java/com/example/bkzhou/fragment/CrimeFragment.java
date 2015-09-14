@@ -1,8 +1,10 @@
 package com.example.bkzhou.fragment;
 
-import android.app.Fragment;
+
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -14,6 +16,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.example.bkzhou.fragment.model.Crime;
+import com.example.bkzhou.fragment.model.CrimeLab;
+
 import java.text.DateFormat;
 import java.util.UUID;
 
@@ -22,6 +27,7 @@ import java.util.UUID;
  */
 public class CrimeFragment extends Fragment {
     public  static final String EXTRA_CRIME_ID = "CRIME";
+    private static final String DIALOG_DATE = "date";
     private Crime mCrime;
     private EditText mTitleField;
     private Button but;
@@ -63,7 +69,16 @@ public class CrimeFragment extends Fragment {
         });
         but = (Button) v.findViewById(R.id.crime_date);
         but.setText(DateFormat.getDateInstance().format(mCrime.getmDate()));
-        but.setEnabled(false);
+//        but.setEnabled(false);
+        but.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                android.support.v4.app.FragmentManager fm  = getActivity().getSupportFragmentManager();
+                DatePickerFragment dialog = new DatePickerFragment();
+                dialog.show(fm,DIALOG_DATE);
+            }
+        });
         mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(mCrime.ismSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
