@@ -1,3 +1,5 @@
 # AndroidProgramming
 Android的练习项目，从fragment开始不断地添加功能
 添加静态newInstance方法对fragment附加argument，避免通过fragment直接托管activity的intent
+使用setArgument对旋转屏幕时避免数据的丢失
+创建静态方法用来创建fragment，处理上层传来的bundle，返回一个fragment（感觉fragment都可以使用这种方法）
