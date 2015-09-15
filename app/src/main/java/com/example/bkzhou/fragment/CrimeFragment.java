@@ -2,6 +2,7 @@ package com.example.bkzhou.fragment;
 
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import com.example.bkzhou.fragment.model.Crime;
 import com.example.bkzhou.fragment.model.CrimeLab;
 
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -28,6 +30,7 @@ import java.util.UUID;
 public class CrimeFragment extends Fragment {
     public  static final String EXTRA_CRIME_ID = "CRIME";
     private static final String DIALOG_DATE = "date";
+    private static final int REQUEST_DATE = 0;
     private Crime mCrime;
     private EditText mTitleField;
     private Button but;
@@ -75,8 +78,11 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 android.support.v4.app.FragmentManager fm  = getActivity().getSupportFragmentManager();
-                DatePickerFragment dialog = new DatePickerFragment();
-                dialog.show(fm,DIALOG_DATE);
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getmDate());
+//                将Crimefragment设置正datePickerFragment的目标fragment
+//                这应该是在Fragment中创建Fragment的唯一情况吧，其他时候直接更换Fragment就好
+                dialog.setTargetFragment(CrimeFragment.this,REQUEST_DATE);
+                dialog.show(fm, DIALOG_DATE);
             }
         });
         mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
@@ -99,5 +105,18 @@ public class CrimeFragment extends Fragment {
         CrimeFragment fragment = new CrimeFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode ){
+            case REQUEST_DATE:
+                Date date  = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+                mCrime.setmDate(date);
+                but.setText(DateFormat.getDateInstance().format(mCrime.getmDate()));
+                break;
+        }
+
     }
 }
