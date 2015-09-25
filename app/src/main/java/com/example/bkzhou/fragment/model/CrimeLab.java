@@ -1,6 +1,9 @@
 package com.example.bkzhou.fragment.model;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.example.bkzhou.fragment.CriminalIntentJSONSeriallizer;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -9,18 +12,24 @@ import java.util.UUID;
  * Created by bkzhou on 15-9-11.
  */
 public class CrimeLab {
+    private static final String TAG = "CrimeLab";
+    private static final String FIMENAME = "crimes.json";
+    private CriminalIntentJSONSeriallizer mSer;
+
     private ArrayList<Crime> mCrimes;
     private static CrimeLab sCrimeLab;
     private Context mAppContext;
     private CrimeLab(Context appContext){
         this.mAppContext = appContext;
-        mCrimes = new ArrayList<Crime>();
-        for(int i =0;i<100;i++){
-            Crime c = new Crime();
-            c.setmTitle("Crime #"+i);
-            c.setmSolved(i%2 == 0);
-            mCrimes.add(c);
+        mSer = new CriminalIntentJSONSeriallizer(mAppContext,FIMENAME);
+//        mCrimes = new ArrayList<Crime>();
+        try{
+            mCrimes = mSer.loadCrimes();
+        }catch (Exception e){
+            mCrimes = new ArrayList<Crime>();
+            Log.d(TAG,"Error loading crimes:",e);
         }
+
     }
     public static  CrimeLab get(Context c){
         if(sCrimeLab == null){
@@ -40,5 +49,26 @@ public class CrimeLab {
             }
         }
         return null;
+    }
+    public void addCrime(Crime c){
+        mCrimes.add(c);
+
+    }
+    public void deleteCrime(Crime c){
+        mCrimes.remove(c);
+    }
+    public boolean saveCrimes(){
+        try{
+            mSer.saveCrimes(mCrimes);
+            Log.d(TAG,"crime saved to file");
+            return true;
+
+        }catch (Exception e){
+            Log.e(TAG,"Error saving crimes : "+e);
+            return false;
+        }
+    }
+    public ArrayList<Crime> getmCrimes(){
+        return mCrimes;
     }
 }

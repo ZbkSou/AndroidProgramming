@@ -3,6 +3,7 @@ package com.example.bkzhou.fragment;
 
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.bkzhou.fragment.model.Crime;
 import com.example.bkzhou.fragment.model.CrimeLab;
@@ -35,6 +37,7 @@ public class CrimeFragment extends Fragment {
     private EditText mTitleField;
     private Button but;
     private CheckBox mSolvedCheckBox;
+    private ImageView takePhoto;
 
 
     @Override
@@ -44,7 +47,7 @@ public class CrimeFragment extends Fragment {
         UUID crimeId  = (UUID) getArguments().getSerializable(EXTRA_CRIME_ID);
         Log.d("TAG",crimeId.toString());
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
-        Log.d("TAG",mCrime.toString());
+//        Log.d("TAG",mCrime.toString());
 
     }
 
@@ -85,6 +88,10 @@ public class CrimeFragment extends Fragment {
                 dialog.show(fm, DIALOG_DATE);
             }
         });
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+//            getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        }
         mSolvedCheckBox = (CheckBox) v.findViewById(R.id.crime_solved);
         mSolvedCheckBox.setChecked(mCrime.ismSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -93,6 +100,14 @@ public class CrimeFragment extends Fragment {
                 mCrime.setmSolved(b);
             }
 
+        });
+        takePhoto = (ImageView) v.findViewById(R.id.takephoto);
+        takePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(),CrimeCameraActivity.class);
+                startActivity(i);
+            }
         });
 
         return v;
@@ -118,5 +133,11 @@ public class CrimeFragment extends Fragment {
                 break;
         }
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.get(getActivity()).saveCrimes();
     }
 }

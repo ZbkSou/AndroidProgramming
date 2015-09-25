@@ -1,5 +1,8 @@
 package com.example.bkzhou.fragment.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -8,6 +11,11 @@ import java.util.UUID;
  * Created by bkzhou on 15-9-9.
  */
 public class Crime {
+    private static  final String JSON_ID = "id";
+    private static  final String JSON_TITLE = "title";
+    private static  final String JSON_SOLVED = "solved";
+    private static  final String JSON_DATE = "date";
+
     private UUID mid;
     private String mTitle;
     private Date mDate;
@@ -54,5 +62,25 @@ public class Crime {
     @Override
     public String toString() {
         return mTitle;
+    }
+
+
+    public Crime (JSONObject jsonObject) throws JSONException{
+        mid = UUID.fromString(jsonObject.getString(JSON_ID));
+        if (jsonObject.has(JSON_TITLE)){
+            mTitle = jsonObject.getString(JSON_TITLE);
+        }
+        mSolved = jsonObject.getBoolean(JSON_SOLVED);
+        mDate = new Date(jsonObject.getLong(JSON_DATE));
+    }
+    public JSONObject toJSON() throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(JSON_ID,mid.toString());
+        jsonObject.put(JSON_TITLE,mTitle.toString());
+        jsonObject.put(JSON_SOLVED,mSolved);
+        jsonObject.put(JSON_DATE,mDate.toString());
+        return jsonObject;
+
+
     }
 }
