@@ -31,5 +31,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_menu_add"/>
+    <ImageView
+        android:id="@+id/crime_imageview"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="centerInside"
+        android:background="@android:color/darker_gray"
+        android:cropToPadding="true"
+        />
 
 </LinearLayout>

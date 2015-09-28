@@ -6,7 +6,9 @@ package com.example.bkzhou.fragment;
         import java.util.UUID;
 
         import android.annotation.TargetApi;
+        import android.app.Activity;
         import android.content.Context;
+        import android.content.Intent;
         import android.hardware.Camera;
         import android.hardware.Camera.Size;
         import android.os.Build;
@@ -27,6 +29,7 @@ public class CrimeCameraFragment extends Fragment {
     private SurfaceView mSurfaceView;
     private View mProgressContainer;
     private View mProressContainer;
+    public static final String EXTRA_PHOTO_FILENAME = "photo_filename";
     private Camera.ShutterCallback mShutterCallback = new Camera.ShutterCallback(){
         @Override
         public void onShutter() {
@@ -57,6 +60,11 @@ public class CrimeCameraFragment extends Fragment {
             }
             if (success){
                 Log.i("CrimeFragment","JPEG saved at "+ filename);
+                Intent i  = new Intent();
+                i.putExtra(EXTRA_PHOTO_FILENAME,filename);
+                getActivity().setResult(Activity.RESULT_OK,i);
+            }else {
+                getActivity().setResult(Activity.RESULT_CANCELED);
             }
             getActivity().finish();
         }

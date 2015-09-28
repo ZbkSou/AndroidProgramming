@@ -4,6 +4,7 @@ package com.example.bkzhou.fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 
 import com.example.bkzhou.fragment.model.Crime;
 import com.example.bkzhou.fragment.model.CrimeLab;
+import com.example.bkzhou.fragment.model.Photo;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,11 +39,13 @@ public class CrimeFragment extends Fragment {
     public  static final String EXTRA_CRIME_ID = "CRIME";
     private static final String DIALOG_DATE = "date";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_PHOTO = 1;
     private Crime mCrime;
     private EditText mTitleField;
     private Button but;
     private CheckBox mSolvedCheckBox;
     private ImageView takePhoto;
+    private ImageView mPhotoView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,12 +109,14 @@ public class CrimeFragment extends Fragment {
             }
 
         });
+        mPhotoView = (ImageView) v.findViewById(R.id.crime_imageview);
         takePhoto = (ImageView) v.findViewById(R.id.takephoto);
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(),CrimeCameraActivity.class);
-                startActivity(i);
+//                startActivity(i);
+                startActivityForResult(i,REQUEST_PHOTO);
             }
         });
 
@@ -136,6 +142,17 @@ public class CrimeFragment extends Fragment {
                 mCrime.setmDate(date);
                 but.setText(DateFormat.getDateInstance().format(mCrime.getmDate()));
                 break;
+            case REQUEST_PHOTO:
+                String filename =data.getStringExtra(CrimeCameraFragment.EXTRA_PHOTO_FILENAME);
+                if(filename != null){
+//                    Log.i("CrimeFragment","filename: "+filename);
+                    Photo p = new Photo(filename);
+                    mCrime.setmPhoto(p);
+                    Log.i("CrimeFragment", "Crime: " + mCrime.getmTitle() + "has a photo");
+                    showPhoto();
+
+                }
+                break;
         }
 
     }
@@ -144,5 +161,20 @@ public class CrimeFragment extends Fragment {
     public void onPause() {
         super.onPause();
         CrimeLab.get(getActivity()).saveCrimes();
+    }
+    private void showPhoto(){
+        Photo p   =  mCrime.getmPhoto();
+        BitmapDrawable b = null;
+        if(p != null ){
+            String path = getActivity().getFileStreamPath(p.getmFilename()).getAbsolutePath();
+            b= PictureUtils.getScaledDrawable(getActivity(),path);
+        }
+        mPhotoView.setImageDrawable(b);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        showPhoto();
     }
 }
