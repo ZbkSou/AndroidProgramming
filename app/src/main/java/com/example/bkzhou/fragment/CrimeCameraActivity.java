@@ -16,8 +16,10 @@ public class CrimeCameraActivity extends  SingleFragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        隐藏标题栏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+//        隐藏状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
 

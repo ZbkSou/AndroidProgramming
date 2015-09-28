@@ -2,7 +2,9 @@ package com.example.bkzhou.fragment;
 
 
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +24,8 @@ import android.widget.ImageView;
 import com.example.bkzhou.fragment.model.Crime;
 import com.example.bkzhou.fragment.model.CrimeLab;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -38,7 +42,6 @@ public class CrimeFragment extends Fragment {
     private Button but;
     private CheckBox mSolvedCheckBox;
     private ImageView takePhoto;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,7 @@ public class CrimeFragment extends Fragment {
 
             }
         });
+
         but = (Button) v.findViewById(R.id.crime_date);
         but.setText(DateFormat.getDateInstance().format(mCrime.getmDate()));
 //        but.setEnabled(false);
@@ -112,6 +116,7 @@ public class CrimeFragment extends Fragment {
 
         return v;
     }
+
 
 
     public static  CrimeFragment newInstance(UUID crimeId){
