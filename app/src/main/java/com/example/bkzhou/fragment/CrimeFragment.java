@@ -1,15 +1,13 @@
 package com.example.bkzhou.fragment;
 
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.hardware.Camera;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,8 +24,6 @@ import com.example.bkzhou.fragment.model.Crime;
 import com.example.bkzhou.fragment.model.CrimeLab;
 import com.example.bkzhou.fragment.model.Photo;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -38,6 +34,7 @@ import java.util.UUID;
 public class CrimeFragment extends Fragment {
     public  static final String EXTRA_CRIME_ID = "CRIME";
     private static final String DIALOG_DATE = "date";
+    private static final String DIALOG_IMAGE = "image";
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_PHOTO = 1;
     private Crime mCrime;
@@ -46,6 +43,7 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolvedCheckBox;
     private ImageView takePhoto;
     private ImageView mPhotoView;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +108,19 @@ public class CrimeFragment extends Fragment {
 
         });
         mPhotoView = (ImageView) v.findViewById(R.id.crime_imageview);
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Photo p = mCrime.getmPhoto();
+                if( p==null ){
+                    return;
+                }
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                String path = getActivity().getFileStreamPath(p.getmFilename()).getAbsolutePath();
+                ImageFragment.newInstance(path).show(fm,DIALOG_IMAGE);
+
+            }
+        });
         takePhoto = (ImageView) v.findViewById(R.id.takephoto);
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +173,13 @@ public class CrimeFragment extends Fragment {
         super.onPause();
         CrimeLab.get(getActivity()).saveCrimes();
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        PictureUtils.cleanImageView(mPhotoView);
+    }
+
     private void showPhoto(){
         Photo p   =  mCrime.getmPhoto();
         BitmapDrawable b = null;
@@ -177,4 +195,5 @@ public class CrimeFragment extends Fragment {
         super.onStart();
         showPhoto();
     }
+
 }
